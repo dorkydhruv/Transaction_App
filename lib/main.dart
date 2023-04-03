@@ -57,6 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
+  bool _showChart = false;
+
   void _newTransaction(String txtitle, double txamount, DateTime chosenDate) {
     final newTx = Transaction(
         title: txtitle,
@@ -91,21 +93,58 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaquery = MediaQuery.of(context);
+    final isLandscape = mediaquery.orientation == Orientation.landscape;
+    final appbar = AppBar(
+      title: const Text('Personal Expenses'),
+      actions: [
+        IconButton(
+            onPressed: () => _startNewTx(context), icon: const Icon(Icons.add))
+      ],
+    );
+    final txlistwidget = Container(
+        height: (mediaquery.size.height -
+                appbar.preferredSize.height -
+                mediaquery.padding.top) *
+            0.6,
+        child: TransactionList(_userTransaction, _deleteTransaction));
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Personal Expenses'),
-        actions: [
-          IconButton(
-              onPressed: () => _startNewTx(context),
-              icon: const Icon(Icons.add))
-        ],
-      ),
+      appBar: appbar,
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Chart(_recentTransactions),
-          TransactionList(_userTransaction, _deleteTransaction),
+          if (isLandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Switch.adaptive(
+                    activeColor: Theme.of(context).accentColor,
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    })
+              ],
+            ),
+          if (isLandscape)
+            _showChart == true
+                ? Container(
+                    height: (mediaquery.size.height -
+                            appbar.preferredSize.height -
+                            mediaquery.padding.top) *
+                        0.7,
+                    child: Chart(_recentTransactions))
+                : txlistwidget,
+          if (!isLandscape)
+            Container(
+                height: (mediaquery.size.height -
+                        appbar.preferredSize.height -
+                        mediaquery.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions)),
+          if (!isLandscape) txlistwidget,
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
