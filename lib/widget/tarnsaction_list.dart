@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:flutter/material.dart';
-import '../main.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 
@@ -9,7 +8,7 @@ class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function deletetx;
 
-  TransactionList(this.transactions, this.deletetx);
+  const TransactionList(this.transactions, this.deletetx, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +21,13 @@ class TransactionList extends StatelessWidget {
                 children: [
                   Text(
                     'No Transaction !',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 30,
                     width: double.infinity,
                   ),
-                  Container(
+                  SizedBox(
                     height: constraints.maxHeight * 0.7,
                     child: Image.asset(
                       'assets/images/cheems.png',
@@ -41,7 +40,8 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                     elevation: 3,
                     child: ListTile(
                       leading: CircleAvatar(
@@ -54,7 +54,7 @@ class TransactionList extends StatelessWidget {
                       ),
                       title: Text(
                         transactions[index].title,
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       subtitle: Text(
                         DateFormat.MMMEd().format(transactions[index].date),
@@ -62,10 +62,11 @@ class TransactionList extends StatelessWidget {
                       trailing: MediaQuery.of(context).size.width > 460
                           ? TextButton.icon(
                               onPressed: () => deletetx(transactions[index].id),
-                              icon: Icon(Icons.delete),
-                              label: Text('Delete'),
+                              icon: const Icon(Icons.delete),
+                              label: const Text('Delete'),
                               style: TextButton.styleFrom(
-                                  primary: Theme.of(context).errorColor),
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.error),
                             )
                           : IconButton(
                               // ignore: prefer_const_constructors

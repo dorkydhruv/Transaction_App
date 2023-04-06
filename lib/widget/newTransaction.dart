@@ -1,14 +1,14 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
+import 'package:learning/widget/adaptiveFlatbutton.dart';
 //  import 'package:learning/widget/userTransaction.dart';
 
 class NewTransaction extends StatefulWidget {
 // NewTransaction({super.key});
   final Function addtx;
 
-  NewTransaction(this.addtx);
+  const NewTransaction(this.addtx, {super.key});
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -82,28 +82,21 @@ class _NewTransactionState extends State<NewTransaction> {
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(20))))),
-              Container(
+              SizedBox(
                 height: 80,
                 child: Row(
                   children: [
                     Text(selectedDate == null
                         ? 'No date chosen!'
                         : 'Picked Date : ${DateFormat.MMMMEEEEd().format(selectedDate!)}'),
-                    TextButton(
-                        onPressed: _presentDatePicker,
-                        child: Text(
-                          'Choose date',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold),
-                        ))
+                    AdaptiveTextbutton('Choose date -', _presentDatePicker)
                   ],
                 ),
               ),
               ElevatedButton(
                 onPressed: submittx,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
+                  backgroundColor: Colors.green,
                   // ignore: prefer_const_constructors
                   textStyle: TextStyle(
                       color: Colors.black,
